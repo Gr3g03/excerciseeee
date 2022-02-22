@@ -1,4 +1,14 @@
-import Database from 'better-sqlite3'
+import express from 'express';
+import Database from 'better-sqlite3';
+import cors from 'cors';
+
+
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+
 
 const db = new Database('./data.db', {
   verbose: console.log
@@ -117,6 +127,11 @@ INSERT INTO visits (hospitalId, patientId, price)
 VALUES (?, ? ,?);
 `)
 
+
+const gethostpitals = db.prepare(`
+SELECT * FROM hospitals;
+`)
+
 for (const hosital of hospitals) {
   createHospitals.run(hosital.name, hosital.city)
 }
@@ -128,3 +143,28 @@ for (const patient of patients) {
 for (const visit of visits) {
   createVisits.run(visit.hospitalId, visit.patientId, visit.price)
 }
+
+
+
+
+
+app.get('/', (req, res) => {
+  `
+ 
+ 
+ `
+
+})
+
+
+
+app.get('/test', (req, res) => {
+
+  const result = gethostpitals.all()
+
+  res.send(result)
+
+})
+
+app.listen(4000, () => console.log(`Listening on : http://localhost:4000/test`))
+
